@@ -4,6 +4,10 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from "../../common/exciptions/error.exciptions.js";
+import {
+  generateNewAccessToken,
+  generateToken,
+} from "../../common/service/token.service.js";
 import { env } from "../../config/env.service.js";
 import { userModel } from "../../database/model/auth.model.js";
 import bcrypt from "bcrypt";
@@ -35,12 +39,11 @@ export const Login = async (body) => {
   }
   let isMatch = await bcrypt.compare(password, data.password);
   if (isMatch) {
-    let Token = await jwt.sign({ id: data._id }, "route", {
-      expiresIn: "30min",
-    });
+    let { accessToken, refreshToken } = await generateToken(data);
     return {
       message: "User logged in successfully",
-      Token,
+      accessToken,
+      refreshToken,
     };
   } else {
     return UnauthorizedException({ message: "Invalid password" });
@@ -53,4 +56,14 @@ export const getById = async (id) => {
     return { message: "User found", data };
   }
   return NotFoundException({ message: "User not found" });
+};
+
+export const generateAccessToken = async (body) => {
+  let { refreshToken } = body;
+
+  let accessToken = await generateNewAccessToken(refreshToken);
+  if (accessToken) {
+    return { message: "Access token generated successfully", accessToken };
+  }
+  return UnauthorizedException({ message: "Invalid refresh token" });
 };

@@ -6,17 +6,13 @@ dotenv.config({ path: path.resolve(`.env.${process.env.NODE_ENV}`) });
 const port = process.env.PORT;
 const salt = process.env.SALT_ROUNDS;
 const databaseUri = process.env.DATABASE_URI;
-const accessSignUser = process.env.ACCESS_SIGN_USER;
-const refreshSignUser = process.env.REFRESH_SIGN_USER;
-const accessSignAdmin = process.env.ACCESS_SIGN_ADMIN;
-const refreshSignAdmin = process.env.REFRESH_SIGN_ADMIN;
+const accessSign = process.env.ACCESS_SIGN;
+const refreshSign = process.env.REFRESH_SIGN;
 
 export const env = {
   port,
   salt,
   databaseUri,
-  accessSignUser,
-  refreshSignUser,
-  accessSignAdmin,
-  refreshSignAdmin,
+  accessSign,
+  refreshSign,
 };
